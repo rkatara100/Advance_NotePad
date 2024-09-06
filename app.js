@@ -4,15 +4,17 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const userModel = require('./models/user');
 const postModel = require('./models/post');
-
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const multerconfig = require('./config/multerconfig'); // Ensure this file is correctly configured
 
+// Setting up view engine and middlewares
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
+
 
 // Middleware to check if user is logged in
 function loggedIn(req, res, next) {
@@ -43,9 +45,34 @@ function loggedIn(req, res, next) {
       });
 }
 
+
+
+// Routes
 app.get('/', (req, res) => {
       res.render('index');
 });
+
+
+app.use('/profile/upload', (req, res) => {
+      res.render('uploadprofile');
+
+});
+
+
+app.post('/upload', loggedIn, multerconfig.single('image'), async (req, res) => {
+
+
+      const user = await userModel.findOne({ email: req.user.email });
+      console.log(req.file.filename);
+
+      user.profilepic = req.file.filename;
+
+      await user.save();
+
+      res.redirect('/profile');
+});
+
+
 
 app.use('/profile', loggedIn, async (req, res) => {
       // console.log("Requesting profile for user:", req.user); // Debugging line
@@ -101,7 +128,7 @@ app.use('/delete/:id', loggedIn, async (req, res) => {
 
 
 //user creation and define userModel
-app.post('/create', async (req, res) => {
+app.post('/register', async (req, res) => {
 
       const { username, name, email, password, age } = req.body; //Destructing 
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>
+            Notepad
+      </title>
+      <link rel="stylesheet" src="/public/stylesheets/style.css">
+      <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+      <div class="w-full min-h-screen bg-zinc-900 text-white p-10">
+            <h3 class="text-3xl mb-5">Upload Profile Picture</h3>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+
+                  <input type="file" class="px-3 py-2 rounded-md outline-none bg-transparent border-2 border"
+                        name="image">
+
+                  <input type="submit" class="px-3 py-2 rounded-md outline-none  bg-blue-500" value="upload file">
+
+
+
+            </form>
+
+      </div>
+</body>
+
+</html>
